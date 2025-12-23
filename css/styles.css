@@ -1,0 +1,241 @@
+:root {
+--azul: #0b1c2d;
+--dorado: #c9a227;
+--blanco: #ffffff;
+--gris: #f4f6f8;
+}
+
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+font-family: system-ui, sans-serif;
+}
+
+
+body {
+background: var(--gris);
+color: var(--azul);
+}
+
+
+.header {
+background: linear-gradient(135deg, var(--azul), #132f4c);
+color: var(--blanco);
+padding: 2rem;
+text-align: center;
+}
+
+
+.container {
+max-width: 1000px;
+margin: 2rem auto;
+padding: 1rem;
+display: grid;
+gap: 2rem;
+}
+
+
+.card {
+background: var(--blanco);
+border-radius: 12px;
+padding: 2rem;
+box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+
+h1 {
+font-size: 2.2rem;
+letter-spacing: 1px;
+}
+
+
+h2 {
+margin-bottom: 1rem;
+border-bottom: 2px solid var(--dorado);
+padding-bottom: .5rem;
+}
+
+
+h3 {
+margin: 1.5rem 0 1rem;
+color: var(--azul);
+}
+
+
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 1rem;
+}
+
+
+input, select {
+padding: .75rem;
+border-radius: 8px;
+border: 1px solid #ccc;
+font-size: 1rem;
+}
+
+
+input:focus, select:focus {
+outline: none;
+border-color: var(--dorado);
+}
+
+
+button {
+margin-top: 1.5rem;
+padding: .9rem 1.5rem;
+background: var(--dorado);
+color: var(--azul);
+font-weight: bold;
+}
+
+#rankingLista {
+  list-style: none;
+  padding: 0;
+}
+
+#rankingLista li {
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background: #f4f4f4;
+}
+
+#rankingLista li strong {
+  color: #1a3cff;
+}
+
+.seleccionado {
+  background: #eef;
+  border-left: 4px solid #3b82f6;
+}
+
+#graficaSeccion {
+  height: 360px;
+  margin-top: 1rem;
+}
+
+#graficaJugador {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+  color: #0f172a;
+}
+
+.header {
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  color: white;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2.6rem;
+  letter-spacing: 1px;
+}
+
+.header p {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #1e40af;
+  border-left: 5px solid #2563eb;
+  padding-left: 0.75rem;
+}
+
+.card h3 {
+  margin-top: 1.5rem;
+  color: #334155;
+}
+
+input, select {
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1px solid #cbd5f5;
+  font-size: 0.95rem;
+  width: 100%;
+  background: #f8fafc;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+button {
+  margin-top: 1.2rem;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  padding: 0.9rem 1.6rem;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 8px 18px rgba(34, 197, 94, 0.4);
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 25px rgba(34, 197, 94, 0.55);
+}
+
+#rankingLista li {
+  list-style: none;
+  background: linear-gradient(90deg, #f8fafc, #e0e7ff);
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 12px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+#rankingLista li:hover {
+  background: linear-gradient(90deg, #dbeafe, #bfdbfe);
+  transform: translateX(6px);
+}
+
+#rankingLista li.seleccionado {
+  border-left: 6px solid #ef4444;
+  background: #fee2e2;
+}
+
+[hidden] {
+  display: none;
+}
