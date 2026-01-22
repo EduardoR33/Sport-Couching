@@ -7,9 +7,9 @@ import {
 
 import { guardarEvaluacion, obtenerJugadores } from './storage.js';
 
-// =======================
-// ELEMENTOS DEL DOM
-// =======================
+/* =======================
+   ELEMENTOS DOM
+======================= */
 const form = document.getElementById('playerForm');
 const resultado = document.getElementById('resultado');
 const contenido = document.getElementById('resultadosContenido');
@@ -18,16 +18,17 @@ const fichaJugador = document.getElementById('fichaJugador');
 const fichaContenido = document.getElementById('fichaContenido');
 const comparacion = document.getElementById('comparacion');
 const comparacionContenido = document.getElementById('comparacionContenido');
-
 const graficaSeccion = document.getElementById('graficaSeccion');
-const ctxGrafica = document.getElementById('graficaJugador').getContext('2d');
+
+const canvasGrafica = document.getElementById('graficaJugador');
+const ctxGrafica = canvasGrafica.getContext('2d');
 
 let grafica = null;
 let seleccionados = [];
 
-// =======================
-// INPUTS
-// =======================
+/* =======================
+   INPUTS
+======================= */
 const nombre = document.getElementById('nombre');
 const edad = document.getElementById('edad');
 const estatura = document.getElementById('estatura');
@@ -40,9 +41,9 @@ const cone = document.getElementById('cone');
 const saltoVertical = document.getElementById('saltoVertical');
 const saltoLargo = document.getElementById('saltoLargo');
 
-// =======================
-// SUBMIT
-// =======================
+/* =======================
+   SUBMIT
+======================= */
 form.addEventListener('submit', e => {
   e.preventDefault();
 
@@ -65,9 +66,7 @@ form.addEventListener('submit', e => {
   const nivel = nivelJugador(score);
 
   const jugadores = obtenerJugadores();
-  const existe = jugadores.find(j =>
-    j.nombre === data.nombre && j.posicion === data.posicion
-  );
+  const existe = jugadores.find(j => j.nombre === data.nombre && j.posicion === data.posicion);
 
   const jugador = {
     id: existe ? existe.id : crypto.randomUUID(),
@@ -83,9 +82,9 @@ form.addEventListener('submit', e => {
   mostrarRanking();
 });
 
-// =======================
-// CÁLCULOS
-// =======================
+/* =======================
+   CÁLCULOS
+======================= */
 function calcularMetricas(d) {
   return {
     velocidad: velocidad40(d.sprint40),
@@ -100,16 +99,16 @@ const pesosPorPosicion = {
   WR: { velocidad: 0.35, aceleracion: 0.25, explosividad: 0.25, agilidad: 0.15 },
   DB: { velocidad: 0.3, aceleracion: 0.25, explosividad: 0.15, agilidad: 0.3 },
   RB: { velocidad: 0.3, aceleracion: 0.3, explosividad: 0.25, agilidad: 0.15 },
-  C: { velocidad: 0.15, aceleracion: 0.15, explosividad: 0.4, agilidad: 0.3 }
+  C:  { velocidad: 0.15, aceleracion: 0.15, explosividad: 0.4, agilidad: 0.3 }
 };
 
-function scorePorPosicion(metricas, posicion) {
-  const p = pesosPorPosicion[posicion];
+function scorePorPosicion(m, pos) {
+  const p = pesosPorPosicion[pos];
   return Number((
-    metricas.velocidad * p.velocidad +
-    metricas.aceleracion * p.aceleracion +
-    metricas.explosividad * p.explosividad +
-    metricas.agilidad * p.agilidad
+    m.velocidad * p.velocidad +
+    m.aceleracion * p.aceleracion +
+    m.explosividad * p.explosividad +
+    m.agilidad * p.agilidad
   ).toFixed(2));
 }
 
@@ -119,9 +118,9 @@ function nivelJugador(score) {
   return 'Desarrollo';
 }
 
-// =======================
-// RESULTADOS
-// =======================
+/* =======================
+   RESULTADOS
+======================= */
 function mostrarResultados(m, score, nivel) {
   resultado.hidden = false;
   contenido.innerHTML = `
@@ -135,9 +134,9 @@ function mostrarResultados(m, score, nivel) {
   `;
 }
 
-// =======================
-// RANKING
-// =======================
+/* =======================
+   RANKING
+======================= */
 function mostrarRanking() {
   const jugadores = obtenerJugadores();
   rankingLista.innerHTML = '';
@@ -149,58 +148,44 @@ function mostrarRanking() {
 
   jugadores
     .sort((a, b) => b.score - a.score)
-    .forEach((j, index) => {
+    .forEach((j, i) => {
       const li = document.createElement('li');
-
       li.innerHTML = `
-        <strong>#${index + 1}</strong> ${j.nombre} (${j.posicion})<br>
+        <strong>#${i + 1}</strong> ${j.nombre} (${j.posicion})<br>
         Score: <strong>${j.score}</strong> – ${j.nivel}
       `;
-
       li.style.cursor = 'pointer';
 
-      li.addEventListener('click', () => {
+      li.onclick = () => {
         mostrarFicha(j);
         mostrarGrafica(j);
         seleccionarJugador(j);
-        li.classList.add('seleccionado');
-      });
+      };
 
       rankingLista.appendChild(li);
     });
 }
 
-// =======================
-// FICHA
-// =======================
+/* =======================
+   FICHA
+======================= */
 function mostrarFicha(j) {
   fichaJugador.hidden = false;
-
   fichaContenido.innerHTML = `
     <p><strong>${j.nombre}</strong></p>
     <p>Edad: ${j.edad}</p>
     <p>Estatura: ${j.estatura} cm</p>
     <p>Peso: ${j.peso} kg</p>
     <p>Posición: ${j.posicion}</p>
-    <hr>
-    <p>40 yd: ${j.sprint40}s</p>
-    <p>10 yd: ${j.sprint10}s</p>
-    <p>Pro Agility: ${j.proAgility}s</p>
-    <p>3 Cone: ${j.cone}s</p>
-    <p>Salto Vertical: ${j.saltoVertical} cm</p>
-    <p>Salto Largo: ${j.saltoLargo} cm</p>
   `;
-
-  fichaJugador.scrollIntoView({ behavior: 'smooth' });
 }
 
-// =======================
-// COMPARACIÓN
-// =======================
-function seleccionarJugador(jugador) {
-  if (seleccionados.find(j => j.id === jugador.id)) return;
-
-  seleccionados.push(jugador);
+/* =======================
+   COMPARACIÓN
+======================= */
+function seleccionarJugador(j) {
+  if (seleccionados.find(x => x.id === j.id)) return;
+  seleccionados.push(j);
 
   if (seleccionados.length === 2) {
     mostrarComparacion(seleccionados[0], seleccionados[1]);
@@ -210,121 +195,164 @@ function seleccionarJugador(jugador) {
 
 function mostrarComparacion(a, b) {
   comparacion.hidden = false;
-
   comparacionContenido.innerHTML = `
     <table>
       <tr><th></th><th>${a.nombre}</th><th>${b.nombre}</th></tr>
       <tr><td>Score</td><td>${a.score}</td><td>${b.score}</td></tr>
-      <tr><td>Velocidad</td><td>${a.metricas.velocidad.toFixed(2)}</td><td>${b.metricas.velocidad.toFixed(2)}</td></tr>
-      <tr><td>Aceleración</td><td>${a.metricas.aceleracion.toFixed(2)}</td><td>${b.metricas.aceleracion.toFixed(2)}</td></tr>
-      <tr><td>Explosividad</td><td>${a.metricas.explosividad.toFixed(1)}</td><td>${b.metricas.explosividad.toFixed(1)}</td></tr>
-      <tr><td>Agilidad</td><td>${a.metricas.agilidad.toFixed(2)}</td><td>${b.metricas.agilidad.toFixed(2)}</td></tr>
     </table>
   `;
 }
 
-// =======================
-// GRÁFICA RADAR
-// =======================
-function mostrarGrafica(jugador) {
+/* =======================
+   GRÁFICA RADAR
+======================= */
+function mostrarGrafica(j) {
   graficaSeccion.hidden = false;
 
-  // ⏳ esperar al siguiente repaint del navegador
   requestAnimationFrame(() => {
-    const data = {
-      labels: ['Velocidad', 'Aceleración', 'Explosividad', 'Agilidad'],
-      datasets: [{
-        label: jugador.nombre,
-        data: [
-          jugador.metricas.velocidad,
-          jugador.metricas.aceleracion,
-          jugador.metricas.explosividad,
-          jugador.metricas.agilidad
-        ],
-        fill: true,
-        backgroundColor: 'rgba(255, 99, 132, 0.25)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 3,
-        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-        pointBorderColor: '#fff',
-        pointHoverRadius: 8,
-        pointRadius: 5
-      }]
-    };
-
     if (grafica) grafica.destroy();
 
     grafica = new Chart(ctxGrafica, {
       type: 'radar',
-      data,
+      data: {
+        labels: ['Velocidad', 'Aceleración', 'Explosividad', 'Agilidad'],
+        datasets: [{
+          label: j.nombre,
+          data: [
+            j.metricas.velocidad,
+            j.metricas.aceleracion,
+            j.metricas.explosividad,
+            j.metricas.agilidad
+          ],
+          backgroundColor: 'rgba(0, 132, 255, 0.35)',
+          borderColor: '#0084ff',
+          borderWidth: 3,
+          pointBackgroundColor: '#ffcc00'
+        }]
+      },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
-        animation: {
-          duration: 1200
-        },
         scales: {
-          r: {
-            beginAtZero: true,
-            max: 100
-          }
+          r: { beginAtZero: true, max: 100 }
         }
       }
     });
   });
 }
 
+/* =======================
+   PDF
+======================= */
 const btnPDF = document.getElementById('btnPDF');
-
 btnPDF.addEventListener('click', generarPDF);
 
 async function generarPDF() {
-  fichaJugador.hidden = false;
-  graficaSeccion.hidden = false;
-
-  await new Promise(resolve => setTimeout(resolve, 300));
-
   const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pdf = new jsPDF();
 
-  let y = 15;
+  const canvas = await html2canvas(document.querySelector('main'));
+  const img = canvas.toDataURL('image/png');
 
-  // ===== TÍTULO =====
-  pdf.setFontSize(18);
-  pdf.text('Flag Football Combine Report', 105, y, { align: 'center' });
-  y += 10;
-
-  // ===== FICHA (HTML → CANVAS) =====
-  const fichaCanvas = await html2canvas(fichaJugador, {
-    scale: 2,
-    backgroundColor: '#ffffff'
-  });
-
-  const fichaImg = fichaCanvas.toDataURL('image/png');
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const fichaHeight = (fichaCanvas.height * pageWidth) / fichaCanvas.width;
-
-  pdf.addImage(fichaImg, 'PNG', 0, y, pageWidth, fichaHeight);
-  y += fichaHeight + 10;
-
-  // ===== GRÁFICA (DESDE CHART.JS) =====
-  if (grafica) {
-    const graficaImg = grafica.toBase64Image();
-
-    pdf.setFontSize(14);
-    pdf.text('Rendimiento Físico', 105, y, { align: 'center' });
-    y += 5;
-
-    pdf.addImage(graficaImg, 'PNG', 20, y, 170, 120);
-  }
-
+  pdf.addImage(img, 'PNG', 0, 0, 210, 297);
   pdf.save(`Combine_${nombre.value}.pdf`);
 }
 
-document.getElementById('btnPDF')
-  .addEventListener('click', generarPDF);
+/* =======================
+   INIT
+======================= */
+mostrarRanking();
 
 // =======================
-// INIT
+// PLAYBOOK – DIBUJO DE RUTAS
 // =======================
-mostrarRanking();
+
+const coloresPosicion = {
+  QB: '#2563eb', // azul
+  WR: '#dc2626', // rojo
+  RB: '#16a34a', // verde
+  C:  '#7c3aed', // morado
+  DB: '#f97316'  // naranja
+};
+
+const field = document.getElementById('field');
+const ctxField = field.getContext('2d');
+
+let dibujando = false;
+let ultimoX = 0;
+let ultimoY = 0;
+
+// Dibujar campo base
+function dibujarCampoBase() {
+  ctxField.clearRect(0, 0, field.width, field.height);
+
+  // Fondo
+  ctxField.fillStyle = '#0f7a3a';
+  ctxField.fillRect(0, 0, field.width, field.height);
+
+  // Bordes
+  ctxField.strokeStyle = '#ffffff';
+  ctxField.lineWidth = 2;
+  ctxField.strokeRect(20, 20, field.width - 40, field.height - 40);
+
+  // Yardas
+  for (let i = 1; i <= 4; i++) {
+    ctxField.beginPath();
+    ctxField.moveTo(20, i * 90);
+    ctxField.lineTo(field.width - 20, i * 90);
+    ctxField.stroke();
+  }
+}
+
+// Inicializar campo
+dibujarCampoBase();
+
+// ===== INICIO DE TRAZO =====
+field.addEventListener('mousedown', e => {
+  dibujando = true;
+  const rect = field.getBoundingClientRect();
+  ultimoX = e.clientX - rect.left;
+  ultimoY = e.clientY - rect.top;
+  ctxField.fillStyle = coloresPosicion[selectPosicionRuta.value];
+  ctxField.beginPath();
+ ctxField.arc(ultimoX, ultimoY, 6, 0, Math.PI * 2);
+ ctxField.fill();
+});
+
+// ===== DIBUJAR RUTA =====
+field.addEventListener('mousemove', e => {
+  if (!dibujando) return;
+
+  const rect = field.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const posicion = selectPosicionRuta.value;
+  ctxField.strokeStyle = coloresPosicion[posicion] || '#facc15';
+  ctxField.lineWidth = 4;
+  ctxField.lineCap = 'round';
+
+  ctxField.beginPath();
+  ctxField.moveTo(ultimoX, ultimoY);
+  ctxField.lineTo(x, y);
+  ctxField.stroke();
+
+  ultimoX = x;
+  ultimoY = y;
+});
+
+// ===== TERMINAR TRAZO =====
+field.addEventListener('mouseup', () => {
+  dibujando = false;
+});
+
+field.addEventListener('mouseleave', () => {
+  dibujando = false;
+});
+
+// ===== LIMPIAR CAMPO =====
+document.getElementById('limpiarCampo')
+  .addEventListener('click', () => {
+    dibujarCampoBase();
+  });
+
+  const selectPosicionRuta = document.getElementById('posicionRuta');

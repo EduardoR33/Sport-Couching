@@ -239,3 +239,14 @@ button:hover {
 [hidden] {
   display: none;
 }
+
+#field {
+  background: #1b5e20;
+  border: 4px solid #fff;
+  border-radius: 10px;
+  cursor: crosshair;
+}
+
+.controls {
+  margin-top: 10px;
+}

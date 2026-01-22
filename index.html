@@ -6,59 +6,57 @@
 <title>Flag Football Combine</title>
 <link rel="stylesheet" href="css/styles.css" />
 </head>
+
 <body>
 
-
 <header class="header">
-<h1>Flag Football Combine Rasing-Sun</h1>
-<p>Evaluación física de jugadores</p>
+  <h1>Flag Football Combine Rasing-Sun</h1>
+  <p>Evaluación física de jugadores</p>
 </header>
-
 
 <main class="container">
 
-
-<!-- PERFIL DEL JUGADOR -->
+<!-- PERFIL -->
 <section class="card">
 <h2>Perfil del Jugador</h2>
+
 <form id="playerForm">
-<div class="grid">
-<input type="text" id="nombre" placeholder="Nombre" required />
-<input type="number" id="edad" placeholder="Edad" required />
-<input type="number" id="estatura" placeholder="Estatura (cm)" required />
-<input type="number" id="peso" placeholder="Peso (kg)" required />
-<select id="posicion" required>
-<option value="">Posición</option>
-<option value="QB">QB</option>
-<option value="WR">WR</option>
-<option value="DB">DB</option>
-<option value="RB">RB</option>
-<option value="C">C</option>
-</select>
-</div>
+  <div class="grid">
+    <input type="text" id="nombre" placeholder="Nombre" required />
+    <input type="number" id="edad" placeholder="Edad" required />
+    <input type="number" id="estatura" placeholder="Estatura (cm)" required />
+    <input type="number" id="peso" placeholder="Peso (kg)" required />
 
+    <select id="posicion" required>
+      <option value="">Posición</option>
+      <option value="QB">QB</option>
+      <option value="WR">WR</option>
+      <option value="DB">DB</option>
+      <option value="RB">RB</option>
+      <option value="C">C</option>
+    </select>
+  </div>
 
-<h3>Pruebas Físicas</h3>
-<div class="grid">
-<input type="number" step="0.01" id="sprint40" placeholder="40 yd (s)" required />
-<input type="number" step="0.01" id="sprint10" placeholder="10 yd (s)" required />
-<input type="number" step="0.01" id="proAgility" placeholder="Pro Agility (s)" required />
-<input type="number" step="0.01" id="cone" placeholder="3 Cone (s)" required />
-<input type="number" id="saltoVertical" placeholder="Salto Vertical (cm)" required />
-<input type="number" id="saltoLargo" placeholder="Salto Largo (cm)" required />
-</div>
+  <h3>Pruebas Físicas</h3>
+  <div class="grid">
+    <input type="number" step="0.01" id="sprint40" placeholder="40 yd (s)" required />
+    <input type="number" step="0.01" id="sprint10" placeholder="10 yd (s)" required />
+    <input type="number" step="0.01" id="proAgility" placeholder="Pro Agility (s)" required />
+    <input type="number" step="0.01" id="cone" placeholder="3 Cone (s)" required />
+    <input type="number" id="saltoVertical" placeholder="Salto Vertical (cm)" required />
+    <input type="number" id="saltoLargo" placeholder="Salto Largo (cm)" required />
+  </div>
 
-
-<button type="submit">Guardar Evaluación</button>
-<button id="btnPDF">📄 Descargar Reporte PDF</button>
+  <button type="submit">Guardar Evaluación</button>
 </form>
-</section>
 
+<button id="btnPDF">📄 Descargar Reporte PDF</button>
+</section>
 
 <!-- RESULTADOS -->
 <section class="card" id="resultado" hidden>
-<h2>Resultados</h2>
-<div id="resultadosContenido"></div>
+  <h2>Resultados</h2>
+  <div id="resultadosContenido"></div>
 </section>
 
 <!-- RANKING -->
@@ -67,36 +65,79 @@
   <ul id="rankingLista"></ul>
 </section>
 
+<!-- FICHA -->
 <section class="card" id="fichaJugador" hidden>
   <h2>Ficha del Jugador</h2>
   <div id="fichaContenido"></div>
 </section>
 
+<!-- COMPARACIÓN -->
 <section class="card" id="comparacion" hidden>
-  <h2>Comparación de Jugadores</h2>
+  <h2>Comparación</h2>
   <div id="comparacionContenido"></div>
 </section>
 
+<!-- GRÁFICA -->
 <section class="card" id="graficaSeccion" hidden>
   <h2>Gráfica de Rendimiento</h2>
   <canvas id="graficaJugador"></canvas>
 </section>
 
-<section id="reportePDF">
-  <div id="fichaJugador"></div>
-  <div id="graficaSeccion">
-    <canvas id="graficaJugador"></canvas>
+<!-- CONTENEDOR PDF (OCULTO) -->
+<section id="reportePDF" style="display:none;">
+  <h2>Reporte del Jugador</h2>
+  <div id="pdfFicha"></div>
+  <canvas id="pdfGrafica"></canvas>
+</section>
+
+<!-- JUGADAS -->
+<button id="btnJugadas">📋 Jugadas</button>
+
+<section id="jugadasSeccion" hidden>
+  <h2>Jugadas de Flag Football</h2>
+
+  <input id="nombreJugada" placeholder="Nombre de la jugada">
+  <select id="tipoJugada">
+    <option>Ofensiva</option>
+    <option>Defensiva</option>
+  </select>
+
+  <textarea id="descripcionJugada"></textarea>
+
+  <canvas id="campo" width="500" height="800"></canvas>
+
+  <button id="guardarJugada">💾 Guardar jugada</button>
+
+  <ul id="listaJugadas"></ul>
+</section>
+
+<section id="playbook">
+  <h2>Dibujar Jugada</h2>
+
+  <canvas id="field" width="800" height="450"></canvas>
+
+  <div class="controls">
+    <select id="posicionRuta">
+      <option value="WR">WR</option>
+      <option value="QB">QB</option>
+      <option value="RB">RB</option>
+      <option value="C">C</option>
+    </select>
+
+    <button id="nuevaRuta">Nueva ruta</button>
+    <button id="limpiarCampo">Limpiar</button>
   </div>
 </section>
 
 </main>
 
-<script type="module" src="js/app.js"></script>
-
-<!-- Chart.js -->
+<!-- LIBRERÍAS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<!-- APP -->
+<script type="module" src="js/app.js"></script>
 
 </body>
 </html>
